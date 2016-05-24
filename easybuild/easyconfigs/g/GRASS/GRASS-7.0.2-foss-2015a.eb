@@ -1,16 +1,17 @@
 easyblock = 'ConfigureMake'
 
-name = "GRASS"
-version = "7.0.2"
+name = 'GRASS'
+version = '7.0.2'
 
 homepage = "http://grass.osgeo.org"
-description = """The Geographic Resources Analysis Support System - used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization"""
+description = """The Geographic Resources Analysis Support System - used for geospatial data management and analysis,
+ image processing, graphics and maps production, spatial modeling, and visualization"""
 
 toolchain = {'name': 'foss', 'version': '2015a'}
 toolchainopts = {'openmp': True}
 
 sources = [SOURCELOWER_TAR_GZ]
-source_urls = ['http://grass.osgeo.org/grass%s/source' % ''.join(version.split('.')[:2])]
+source_urls = ['http://grass.osgeo.org/grass%(version_major)s%(version_minor)s/source']
 
 patches = [
     '%(name)s-%(version)s_OpenMP.patch',
@@ -28,33 +29,21 @@ dependencies = [
     ('freetype', '2.6.2'),
     ('FFmpeg', '2.8.5'),
     ('LibTIFF', '4.0.6'),
+    ('zlib', '1.2.8'),
 ]
 
-preconfigopts = "LDFLAGS=' -lm -lpthread ' "
+preconfigopts = 'LDFLAGS="$LDFLAGS -lm -lpthread " '
 
-configopts = """\
-    --with-cxx  --enable-64bit  --enable-largefile=yes \
-    --without-postgres  --with-sqlite  --with-spatialite \
-    --with-blas  --with-lapack  --with-fftw  --with-pthread \
-    --with-openmp \
-    --with-geos \
-    --with-readline \
-    --with-freetype \
-    --with-netcdf \
-    --with-ffmpeg \
-    --with-ffmpeg-includes=$EBROOTFFMPEG/include/* \
-    --with-proj-share=$EBROOTPROJ/share/proj \
-    --without-opengl \
-    --without-glw \
-    --without-tcltk \
-    --with-python \
-    --without-wxwidgets \
-    --without-x \
-    --with-png \
-    --with-png-libs=$EBROOTLIBPNG/lib
-"""
+configopts = "--with-cxx --enable-64bit --enable-largefile=yes "
+configopts += "--with-sqlite --with-spatialite  --with-blas --with-lapack --with-fftw --with-pthread "
+configopts += "--with-openmp --with-geos --with-readline --with-freetype --with-netcdf --with-python "
+configopts += "--with-ffmpeg --with-ffmpeg-includes=$EBROOTFFMPEG/include/* "
+configopts += "--with-png --with-png-libs=$EBROOTLIBPNG/lib "
+configopts += "--with-proj-share=$EBROOTPROJ/share/proj "
+configopts += "--without-glw --without-opengl --without-postgres --without-tcltk --without-wxwidgets --without-x "
 
-prebuildopts = "sed -i -e '/^\s*gui\s*\\\s*$/d' Makefile && rm -rf ./gui && "
+# remove gui from list of directories
+prebuildopts = "sed -i '' '/gui /d' Makefile && "
 
 sanity_check_paths = {
     'files': [],
