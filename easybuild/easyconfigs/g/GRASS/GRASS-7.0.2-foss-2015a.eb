@@ -19,12 +19,13 @@ patches = [
 ]
 
 dependencies = [
+    ('zlib', '1.2.8'),
     ('Python', '2.7.11'),        # and so png, curses, readline
     ('libpng', '1.6.20'),
     ('libreadline', '6.3'),
     ('ncurses', '5.9'),
     ('netCDF', '4.3.3.1'),
-    ('GDAL', '2.0.1'),
+    ('GDAL', '2.1.0'),
     ('libspatialite', '4.3.0a'), # and so GEOS, SQLite
     ('freetype', '2.6.2'),
     ('FFmpeg', '2.8.5'),
@@ -35,11 +36,21 @@ dependencies = [
 preconfigopts = 'LDFLAGS="$LDFLAGS -lm -lpthread " '
 
 configopts = "--with-cxx --enable-64bit --enable-largefile=yes "
-configopts += "--with-sqlite --with-spatialite  --with-blas --with-lapack --with-fftw --with-pthread "
-configopts += "--with-openmp --with-geos --with-readline --with-freetype --with-netcdf --with-python "
-configopts += "--with-ffmpeg --with-ffmpeg-includes=$EBROOTFFMPEG/include/* "
-configopts += "--with-png --with-png-libs=$EBROOTLIBPNG/lib "
+configopts += "--with-sqlite --with-spatialite  --with-blas --with-lapack --with-pthread "
+configopts += "--with-openmp --with-python --with-cairo=no "
+configopts += "--with-geos=$EBROOTGEOS/bin/geos-config --with-netcdf=$EBROOTNETCDF/bin/nc-config "
+configopts += "--with-fftw --with-fftw-libs=$EBROOTFFTW/lib --with-fftw-includes=$EBROOTFFTW/include "
+configopts += "--with-freetype --with-freetype-libs=$EBROOTFREETYPE/lib "
+configopts += "--with-freetype-includes=$EBROOTFREETYPE/include "
+configopts += "--with-readline --with-readline-libs=$EBROOTLIBREADLINE/lib "
+configopts += "--with-readline-includes=$EBROOTLIBREADLINE/include "
+configopts += "--with-ffmpeg --with-ffmpeg-libs=$EBROOTFFMPEG/lib --with-ffmpeg-includes=$EBROOTFFMPEG/include/* "
+configopts += '--with-png --with-png-libs="$EBROOTLIBPNG/lib $EBROOTZLIB/lib" '
+configopts += "--with-png-includes=$EBROOTLIBPNG/include "
+configopts += "--with-proj --with-proj-libs=$EBROOTPROJ/lib --with-proj-includes=$EBROOTPROJ/include "
 configopts += "--with-proj-share=$EBROOTPROJ/share/proj "
+configopts += "--with-tiff-libs=$EBROOTLIBTIFF/lib --with-tiff-includes=$EBROOTLIBTIFF/include "
+configopts += "--with-zlib --with-zlib-libs=$EBROOTZLIB/lib --with-zlib-includes=$EBROOTZLIB/include "
 configopts += "--without-glw --without-opengl --without-postgres --without-tcltk --without-wxwidgets --without-x "
 
 # remove gui from list of directories

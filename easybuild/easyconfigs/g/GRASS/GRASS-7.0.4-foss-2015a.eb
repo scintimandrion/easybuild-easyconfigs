@@ -1,0 +1,71 @@
+easyblock = 'ConfigureMake'
+
+name = "GRASS"
+version = "7.0.4"
+
+homepage = "http://grass.osgeo.org"
+description = """The Geographic Resources Analysis Support System - used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization"""
+
+toolchain = {'name': 'foss', 'version': '2015a'}
+toolchainopts = {'openmp': True}
+
+sources = [SOURCELOWER_TAR_GZ]
+source_urls = ['http://grass.osgeo.org/grass%s/source' % ''.join(version.split('.')[:2])]
+
+patches = [
+    '%(name)s-%(version)s_OpenMP.patch',
+    '%(name)s-%(version)s_ncurses.patch',
+]
+
+dependencies = [
+    ('zlib', '1.2.8'),
+    ('Python', '2.7.11'),        # and so png, curses, readline
+    ('libpng', '1.6.20'),
+    ('libreadline', '6.3'),
+    ('ncurses', '5.9'),
+    ('netCDF', '4.3.3.1'),
+    ('GDAL', '2.1.0'),
+    ('libspatialite', '4.3.0a'), # and so GEOS, SQLite
+    ('freetype', '2.6.2'),
+    ('FFmpeg', '2.8.5'),
+    ('LibTIFF', '4.0.6'),
+]
+
+preconfigopts = "LDFLAGS=' -lm -lpthread ' "
+configopts = """ \
+    --enable-64bit \
+    --enable-largefile=yes \
+    --with-cairo=no \
+    --with-cxx \
+    --with-ffmpeg --with-ffmpeg-libs=$EBROOTFFMPEG/lib --with-ffmpeg-includes=$EBROOTFFMPEG/include/* \
+    --with-fftw --with-fftw-libs=$EBROOTFFTW/lib --with-fftw-includes=$EBROOTFFTW/include \
+    --with-freetype --with-freetype-libs=$EBROOTFREETYPE/lib --with-freetype-includes=$EBROOTFREETYPE/include \
+    --with-geos=$EBROOTGEOS/bin/geos-config \
+    --without-glw \
+    --with-lapack \
+    --with-netcdf=$EBROOTNETCDF/bin/nc-config \
+    --without-opengl \
+    --with-openmp \
+    --with-png --with-png-libs="$EBROOTLIBPNG/lib $EBROOTZLIB/lib" --with-png-includes=$EBROOTLIBPNG/include \
+    --without-postgres \
+    --with-proj --with-proj-libs=$EBROOTPROJ/lib --with-proj-includes=$EBROOTPROJ/include --with-proj-share=$EBROOTPROJ/share/proj \
+    --with-pthread \
+    --with-python \
+    --with-readline --with-readline-libs=$EBROOTLIBREADLINE/lib --with-readline-includes=$EBROOTLIBREADLINE/include \
+    --with-spatialite \
+    --with-sqlite \
+    --without-tcltk \
+    --with-tiff-libs=$EBROOTLIBTIFF/lib --with-tiff-includes=$EBROOTLIBTIFF/include \
+    --without-wxwidgets \
+    --without-x \
+    --with-zlib --with-zlib-libs=$EBROOTZLIB/lib --with-zlib-includes=$EBROOTZLIB/include
+"""
+
+prebuildopts = "sed -i '/gui /d' Makefile && "
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ["."]
+}
+
+moduleclass = 'geo'
