@@ -1,0 +1,40 @@
+easyblock = 'PythonPackage'
+
+name = 'ARCSI'
+version = '0.15.0'
+
+homepage = 'https://bitbucket.org/petebunting/arcsi'
+description = """The Atmospheric and Radiometric Correction of Satellite
+ Imagery (ARCSI) software provides a command line tool for the atmospheric
+ correction of Earth Observation imagery. The aim of ARCSI is to provide as
+ automatic as possible method of retrieving the atmospheric correction
+ parameters and using them to parameterise 6S.Universal Command Line
+ Environment for AWS."""
+
+toolchain = {'name': 'foss', 'version': '2015a'}
+
+source_urls = ['https://bitbucket.org/petebunting/arcsi/downloads']
+sources = [SOURCELOWER_TAR_GZ]
+
+pyver = '3.5.1'
+pyshortver = '.'.join(pyver.split('.')[:2])
+versionsuffix = '-Python-%(pyver)s'
+
+dependencies = [
+    ('Python', pyver),
+    ('Python-GDAL', '1.11.2', '-Python-%s' % pyver),
+    ('KEALib', '1.4.4'),
+    ('RSGISLib', '2.2.0'),
+]
+
+modname = 'arcsilib'
+options = {'modulename': modname}
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['lib/python%s/site-packages/%s' % (pyshortver, modname)],
+}
+
+sanity_check_commands = [('python', "-c 'import %s'" % modname)]
+
+moduleclass = 'geo'
