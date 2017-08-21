@@ -1,0 +1,29 @@
+name = 'Qt'
+version = '4.8.7'
+
+glib_version = '2.52.0'
+python_version = '2.7.13'
+glibsuffix = '-GLib-%s' % glib_version
+pysuffix = '-Python-%s' % python_version
+versionsuffix = '%s%s' % (glibsuffix, pysuffix)
+
+homepage = 'http://qt.io/'
+description = "Qt is a comprehensive cross-platform C++ application framework."
+
+toolchain = {'name': 'gimkl', 'version': '2017a'}
+
+source_urls = [
+    'http://download.qt.io/official_releases/qt/%(version_major_minor)s/%(version)s/',
+    'http://download.qt.io/archive/qt/%(version_major_minor)s/%(version)s/'
+]
+sources = ['%(namelower)s-everywhere-opensource-src-%(version)s.tar.gz']
+
+patches = ['Qt-%(version)s_phonon-export.patch']
+
+dependencies = [
+    ('GLib', glib_version),
+    ('Python', python_version),
+    ('X11', '20170129'),
+]
+
+moduleclass = 'devel'
