@@ -1,0 +1,81 @@
+easyblock = 'Bundle'
+
+name = 'Python-GDAL'
+version = '2.1.3'
+python_version = '2.7.13'
+geos_version = '3.5.1'
+versionsuffix = '-GEOS-%s-Python-%s' % (geos_version, python_version)
+
+homepage = 'http://www.python.org/'
+description = """GDAL, pyModis, RIOS, Fiona, Shapely and descartes - Python
+ packages for geospatial data I/O based on the OSGEO libraries GDAL and OGR"""
+
+toolchain = {'name': 'gimkl', 'version': '2017a'}
+
+# these are extensions for Python
+exts_defaultclass = 'PythonPackage'
+exts_filter = ("python", "import %(ext_name)s")
+
+dependencies = [
+    ('GEOS', geos_version),
+    ('GDAL', version, '-GEOS-%s-Python-%s' % (geos_version, python_version)),
+    #('matplotlib', '2.0.0'), # needed if matplotlib is not included with Python
+]
+
+exts_list = [
+    ('psycopg2', '2.7.1', {
+        'source_tmpl': 'psycopg2-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/p/psycopg2'],
+    }),
+    ('GDAL', version, {
+        'source_tmpl': 'GDAL-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/G/GDAL',
+        'https://pypi.python.org/packages/source/g/GDAL/'],
+    }),
+    ('pyModis', '2.0.4', {
+        'source_tmpl': 'pyModis-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/p/pyModis'],
+    }),
+    ('rios', '1.4.3', {
+        'source_tmpl': 'rios-%(version)s.tar.gz',
+        'source_urls': ['https://bitbucket.org/chchrsc/rios/downloads/'],
+    }),
+    ('click', '6.7', {              # For cligj
+        'source_tmpl': 'click-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/c/click'],
+    }),
+    ('click-plugins', '1.0.3', {    # For Fiona
+        'source_tmpl': 'click-plugins-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/c/click-plugins'],
+    }),
+    ('cligj', '0.4.0', {            # For Fiona
+        'source_tmpl': 'cligj-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/c/cligj'],
+    }),
+    ('munch', '2.1.1', {            # For Fiona
+        'source_tmpl': 'munch-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/m/munch'],
+    }),
+    ('Fiona', '1.7.5', {
+        'source_tmpl': 'Fiona-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/F/Fiona'],
+    }),
+    ('Shapely', '1.5.17', {
+        'source_tmpl': 'Shapely-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/S/Shapely/'],
+        'modulename': 'shapely',
+    }),
+    ('descartes', '1.1.0', {
+        'source_tmpl': 'descartes-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/d/descartes'],
+    }),
+]
+
+modextrapaths = {'PYTHONPATH': 'lib/python%s/site-packages' % '.'.join(python_version.split('.')[:2])}
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['.']
+}
+
+moduleclass = 'geo'
