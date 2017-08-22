@@ -1,0 +1,67 @@
+easyblock = 'Bundle'
+
+name = 'Python-CUDA'
+version = '2017.8.11'
+python_version = '3.6.0'
+cuda_version = '8.0.61'
+libgpuarray_version = '0.6.2' # named because it appears 3 times.
+versionsuffix = '-CUDA-%s-Python-%s' % (cuda_version, python_version)
+
+homepage = 'http://www.python.org/'
+description = """A convenience module for several Python packages that require
+ the CUDA drivers"""
+
+toolchain = {'name': 'gimkl', 'version': '2017a'}
+
+# these are extensions for Python
+exts_defaultclass = 'PythonPackage'
+exts_filter = ("python", "import %(ext_name)s")
+
+dependencies = [
+    ('CUDA', cuda_version, '', True),
+    ('libgpuarray', libgpuarray_version, '-CUDA-'+cuda_version),  # for pygpu/Theano
+    #('Python', python_version),
+    # Special version of Python
+    ('Python', python_version, '-LLVM-4.0.0-without-CUDA'),
+]
+
+exts_list = [
+    ('appdirs', '1.4.3', {     # for pycuda
+        'source_urls': ['https://pypi.python.org/packages/source/a/appdirs/'],
+    }),
+    ('Mako', '1.0.6', {        # For skcuda (and others), weirdly.
+        'source_tmpl': 'Mako-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/M/Mako/'],
+        'modulename': 'mako',
+    }),
+    ('pytools', '2016.2.6', {  # for pycuda
+        'source_urls': ['https://pypi.python.org/packages/source/p/pytools/'],
+    }),
+    ('pycuda', '2016.1.2', {
+        'source_urls': ['https://pypi.python.org/packages/source/p/pycuda/'],
+    }),
+    ('skcuda', '0.5.1', {
+        'source_tmpl': 'scikit-cuda-%(version)s.tar.gz',
+        'source_urls': ['https://pypi.python.org/packages/source/s/scikit-cuda/'],
+    }),
+    ('pygpu', libgpuarray_version, {
+        'source_tmpl': 'pygpu-%(version)s.tar.gz',
+    }),
+    ('Theano', '0.9.0', {
+        'source_urls': ['https://pypi.python.org/packages/source/T/Theano/'],
+        'modulename': 'theano',
+    }),
+    ('Keras', '2.0.5', {
+        'source_urls': ['https://pypi.python.org/packages/source/K/Keras/'],
+        'modulename': 'keras',
+    })
+]
+
+modextrapaths = {'PYTHONPATH': 'lib/python%s/site-packages' % '.'.join(python_version.split('.')[:2])}
+
+sanity_check_paths = {
+    'files': [],
+    'dirs': ['.']
+}
+
+moduleclass = 'vis'
